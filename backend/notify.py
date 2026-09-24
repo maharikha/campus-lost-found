@@ -1,15 +1,19 @@
 """
-Email notifications for the whole claim lifecycle, using only the standard library.
+Email notifications for the whole claim lifecycle.
 
     owner   possible match handed in, claim approved (with the pickup code)
     finder  the owner was verified, the item was collected
 
-Set SMTP_USER and SMTP_PASSWORD to send real email (for Gmail, an app password:
-Google account > Security > 2-Step Verification > App passwords). Without them,
-every email is printed to the console instead, so the app works the same.
+Two ways to send real email; without either, emails are printed to the console
+instead, so the app works the same:
 
+    BREVO_API_KEY   Brevo's HTTPS API (xkeysib-...). Use this on hosts that block
+                    outgoing SMTP ports, such as Railway's trial and Hobby plans.
+    SMTP_USER, SMTP_PASSWORD   any SMTP server (Brevo, or Gmail with an App password)
     SMTP_HOST   default smtp.gmail.com         SMTP_PORT  default 587 (STARTTLS)
-    MAIL_FROM   default SMTP_USER              APP_URL    link base, e.g. https://you.hf.space
+
+    MAIL_FROM   a verified sender (default SMTP_USER)
+    APP_URL     link base in emails, e.g. https://your-app.up.railway.app
 """
 from __future__ import annotations
 
@@ -19,21 +23,25 @@ import smtplib
 from concurrent.futures import ThreadPoolExecutor
 from email.message import EmailMessage
 
+import httpx
+
 from matcher import Report
 
 SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 MAIL_FROM = os.getenv("MAIL_FROM") or SMTP_USER
 APP_URL = os.getenv("APP_URL", "").rstrip("/")
 
+SIGNATURE = "\n\n- Campus Lost & Found\n"
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$")
 _pool = ThreadPoolExecutor(max_workers=1)     # SMTP takes a second or two; never block a request
 
 
 def enabled() -> bool:
-    return bool(SMTP_USER and SMTP_PASSWORD)
+    return bool(BREVO_API_KEY and MAIL_FROM) or bool(SMTP_USER and SMTP_PASSWORD)
 
 
 NOUNS = {"id_card": "ID card", "other": "item", "clothing": "clothing item",
@@ -64,9 +72,11 @@ def _deliver(to: str, subject: str, body: str) -> None:
     if not enabled():
         print(f"[email off] to {to}: {subject}")
         return
+    if BREVO_API_KEY:
+        return _deliver_api(to, subject, body)
     msg = EmailMessage()
     msg["From"], msg["To"], msg["Subject"] = f"Campus Lost & Found <{MAIL_FROM}>", to, subject
-    msg.set_content(body + "\n\n- Campus Lost & Found\n")
+    msg.set_content(body + SIGNATURE)
     try:
         with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as s:
             s.starttls()
@@ -74,6 +84,22 @@ def _deliver(to: str, subject: str, body: str) -> None:
             s.send_message(msg)
         print(f"[email sent] to {to}: {subject}")
     except (smtplib.SMTPException, OSError) as e:      # a mail problem must never break the app
+        print(f"[email failed] to {to}: {subject} ({e})")
+
+
+def _deliver_api(to: str, subject: str, body: str) -> None:
+    """Brevo's transactional email API over HTTPS (port 443 is never blocked)."""
+    try:
+        r = httpx.post("https://api.brevo.com/v3/smtp/email", timeout=20,
+                       headers={"api-key": BREVO_API_KEY, "accept": "application/json"},
+                       json={"sender": {"name": "Campus Lost & Found", "email": MAIL_FROM},
+                             "to": [{"email": to}], "subject": subject,
+                             "textContent": body + SIGNATURE})
+        if r.status_code >= 300:
+            print(f"[email failed] to {to}: {subject} (Brevo {r.status_code}: {r.text[:200]})")
+        else:
+            print(f"[email sent] to {to}: {subject}")
+    except httpx.HTTPError as e:
         print(f"[email failed] to {to}: {subject} ({e})")
 
 

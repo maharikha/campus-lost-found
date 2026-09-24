@@ -183,7 +183,8 @@ python evaluate.py my_items.csv --save-calibrator          # learn weights from 
 
 | Variable | Purpose |
 |---|---|
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_FROM` | Send real emails (any SMTP provider; e.g. Brevo `smtp-relay.brevo.com`, or Gmail with an App password). Without these, emails are printed to the console. |
+| `BREVO_API_KEY`, `MAIL_FROM` | Send real emails through Brevo's HTTPS API (key starts `xkeysib-`). **Use this on Railway**, whose trial and Hobby plans block outgoing SMTP. `MAIL_FROM` must be a verified Brevo sender. |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_FROM` | Or send through any SMTP server (e.g. Brevo `smtp-relay.brevo.com`, or Gmail with an App password). Without either option, emails are printed to the console. |
 | `APP_URL` | Base URL used for links in emails, e.g. `https://your-app.up.railway.app` |
 | `DATA_DIR` | Folder for the database and photos (point it at a persistent volume when hosted) |
 | `ANTHROPIC_API_KEY` (+ `ANTHROPIC_MODEL`) | Use Claude for text extraction, tailored ownership questions and answer judging |
@@ -204,7 +205,7 @@ docker run -p 7860:7860 lostfound            # http://localhost:7860 (API, photo
 
 1. **New Project → Deploy from GitHub repo.** Railway builds the `Dockerfile`; `railway.json` makes it wait until the models have loaded.
 2. Add a **Volume** mounted at `/data`, and set `DATA_DIR=/data`.
-3. Add the email variables above, then **Settings → Networking → Generate Domain**, and set `APP_URL` to that domain.
+3. Add `BREVO_API_KEY` and `MAIL_FROM` (SMTP is blocked on Railway's lower plans), then **Settings → Networking → Generate Domain**, and set `APP_URL` to that domain.
 4. Load demo data with `python backend/seed.py https://your-domain`.
 
 The app needs about 1.2 GB of RAM, so free 512 MB tiers are too small.
