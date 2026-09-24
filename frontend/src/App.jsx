@@ -37,6 +37,9 @@ export default function App() {
           Campus Lost &amp; Found
         </Link>
         <nav className="topnav" aria-label="Main">
+          <NavLink to="/" end>
+            Home
+          </NavLink>
           <NavLink to="/lost">
             <span className="nav-long">I lost something</span>
             <span className="nav-short">Lost</span>
