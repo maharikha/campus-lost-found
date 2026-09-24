@@ -39,6 +39,7 @@ UPLOADS = HERE / "uploads"
 UPLOADS.mkdir(exist_ok=True)
 
 NOTIFY_AT = 0.75            # alert an owner once a found item reaches this confidence
+SIMILAR_AT = 0.40           # softer "something similar was handed in" alert from here
 AMBIGUOUS_BELOW = 0.75      # below this, Smart Claim asks the owner one question
 MAX_CLAIM_ATTEMPTS = 2      # wrong answers before a claim is flagged for staff
 MAX_ANSWERS = 3             # Smart Claim answers per lost report (stops guessing games)
@@ -146,19 +147,29 @@ def matches_for(r: Report, top_k: int = 5) -> dict:
     return {"matches": [match_json(m) for m in ms], "question": question}
 
 
+def contradicts(f: dict) -> bool:
+    """Both sides know it and it disagrees: no shared color, another brand, other writing."""
+    return f.get("color") == 0 or (f.get("brand") is not None and f["brand"] <= 0.5) \
+        or f.get("text_on_item") == 0
+
+
 def alert_owners(found: Report) -> int:
-    """Check a newly found item against every open lost report."""
+    """Check a newly found item against every open lost report. Owners hear about likely
+    matches, and about similar items (lower score, or a clear difference such as color)."""
     open_lost = [x for x in REPORTS.values() if x.kind == "lost" and x.status == "open"]
     alerted = 0
     for m in rank(found, open_lost, top_k=5, calibrator=state["calibrator"]):
-        if m.confidence >= NOTIFY_AT:
+        if m.confidence >= SIMILAR_AT:
+            likely = m.confidence >= NOTIFY_AT and not contradicts(m.features)
             where = found.kept_at or "Security desk"
             place = ("the finder still has it" if where == "With the finder"
                      else f"it's at the {where.lower()}")
             item = notify.a_item(found)
+            item = item[0].upper() + item[1:]
             db.add_notification(m.report.id, found.id, m.confidence,
-                                f"{item[0].upper()}{item[1:]} that may be yours was handed in, and {place}.")
-            notify.match_found(m.report, found, m.confidence, place)
+                                f"{item} that may be yours was handed in, and {place}." if likely else
+                                f"{item} similar to yours was handed in, and {place}. Take a look in case it's yours.")
+            notify.match_found(m.report, found, m.confidence, place, likely)
             alerted += 1
     return alerted
 

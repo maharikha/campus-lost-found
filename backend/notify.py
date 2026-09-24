@@ -85,13 +85,19 @@ def send(report: Report | None, subject: str, body: str) -> None:
 
 
 # ============================================================================= the four emails
-def match_found(lost: Report, found: Report, confidence: float, place: str) -> None:
+def match_found(lost: Report, found: Report, confidence: float, place: str, likely: bool = True) -> None:
     item = a_item(found)
-    send(lost, f"{item[0].upper()}{item[1:]} that may be yours was handed in",
-         f"Good news: someone handed in {item} that matches your report "
-         f"({round(confidence * 100)}% confidence), and {place}.\n\n"
-         "To collect it, open your report, press \"This is mine\" and answer one question "
-         "about it. The question checks you're the owner." + _link(f"/reports/{lost.id}"))
+    claim = ("To collect it, open your report, press \"This is mine\" and answer one question "
+             "about it. The question checks you're the owner." + _link(f"/reports/{lost.id}"))
+    if likely:
+        send(lost, f"{item[0].upper()}{item[1:]} that may be yours was handed in",
+             f"Good news: someone handed in {item} that matches your report "
+             f"({round(confidence * 100)}% confidence), and {place}.\n\n" + claim)
+    else:
+        send(lost, f"{item[0].upper()}{item[1:]} similar to yours was handed in",
+             f"Someone handed in {item} that looks similar to the {_item(lost)} you reported "
+             f"({round(confidence * 100)}% match), and {place}. It may not be yours, "
+             "but it's worth a quick look at the photo and details.\n\nIf it is yours: " + claim[0].lower() + claim[1:])
 
 
 def claim_approved(lost: Report | None, found: Report, code: str) -> None:
