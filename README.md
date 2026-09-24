@@ -46,7 +46,7 @@ found report ─┘                                          └─> owner alert
 | **Score** | Up to nine signals per pair, each from 0 to 1: text similarity, photo similarity, **photo against description**, category, color, brand, writing on the item, distance between campus zones, and time gap. A signal with no evidence is skipped, not counted as zero. |
 | **Fuse** | A weighted average, turned into a probability and then compared across all candidates, since at most one can be yours. |
 | **Ask** | If the top match isn't clear, Smart Claim picks the question whose answer best tells the candidates apart (confidence-weighted entropy). |
-| **Alert** | When a new found item scores at least 75% against an open lost report, the owner is notified. |
+| **Alert** | When a new found item scores at least 75% against an open lost report, the owner is notified in the app and by email. |
 
 ## Results
 
@@ -65,6 +65,19 @@ Adding structured signals (color, brand, place, time) to text similarity cuts ra
 In the demo data:
 - A lost navy bottle, described with no photo, matches the right found bottle at **98% confidence**.
 - Two near-identical black chargers start at **52% vs 46%**. Smart Claim asks about writing on the item, and the owner's answer ("my name ARJUN is on the plug") moves the right charger to the top.
+
+## Email notifications across the whole journey
+
+Nobody has to keep checking the site. Everyone involved gets an email at each step:
+
+| When | Who | What they get |
+|---|---|---|
+| A likely match is handed in | Owner | What was found, how confident the match is, where it's kept, and a link to claim it |
+| The owner passes the ownership check | Owner | Their **pickup code** and where to collect the item |
+| The owner passes the ownership check | Finder | Confirmation, plus a request to drop the item at the desk if they still have it |
+| The desk hands the item over | Finder | A thank-you: the item is back with its owner |
+
+Emails are sent in the background, so the app never waits on the mail server, and a mail outage can't break a report or a claim. Contact details are used only for these emails and are never shown.
 
 ## Privacy and safety
 
@@ -88,7 +101,7 @@ Matching runs in memory, so ranking an item against every open report takes mill
 ## What we'd build next
 
 - **Campus login and a staff role.** There are no accounts yet, and the desk page is open.
-- **Real notifications** by email, SMS or Telegram. Alerts currently appear inside the app.
+- **More notification channels:** SMS and Telegram alongside email, and a daily digest for the desk.
 - **A calibrator learned from real data.** The code already fits one from labelled pairs; it needs a larger, photographed dataset.
 - **Real campus geography**, using walking distances between buildings instead of approximate zone coordinates.
 - **Automatic blurring** of ID cards and faces in photos before listing.

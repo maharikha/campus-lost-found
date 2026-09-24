@@ -30,6 +30,7 @@ from pydantic import BaseModel
 import db
 import enrich
 import llm
+import notify
 import verify
 from matcher import CAMPUS_ZONES, CATEGORY_GROUPS, Encoder, Match, Report, best_question, rank
 
@@ -60,7 +61,8 @@ async def lifespan(_app: FastAPI):
         state["calibrator"] = pickle.loads(calibrator.read_bytes())
     for r in db.load_reports():
         REPORTS[r.id] = r
-    print(f"Ready with {len(REPORTS)} reports. LLM: {'on' if llm.available() else 'off, using rules'}.")
+    print(f"Ready with {len(REPORTS)} reports. LLM: {'on' if llm.available() else 'off, using rules'}. "
+          f"Email: {'on' if notify.enabled() else 'off, printing to console'}.")
     yield
 
 
@@ -156,7 +158,7 @@ def alert_owners(found: Report) -> int:
             item = found.category.replace("_", " ")
             db.add_notification(m.report.id, found.id, m.confidence,
                                 f"A {item} that may be yours was handed in, and {place}.")
-            # Send the real alert here: email / SMS / Telegram to m.report.contact.
+            notify.match_found(m.report, found, m.confidence, place)
             alerted += 1
     return alerted
 
@@ -327,6 +329,8 @@ def verify_claim(cid: str, body: VerifyIn):
             if rid in REPORTS:
                 REPORTS[rid].status = "claimed"
                 db.save_report(REPORTS[rid])
+        notify.claim_approved(REPORTS.get(c["lost_id"]), found, c["pickup_code"])
+        notify.owner_verified(found)
     elif c["attempts"] >= MAX_CLAIM_ATTEMPTS:
         c["status"] = "flagged"                   # a person at the desk takes over
     c["updated_at"] = now().isoformat(timespec="minutes")
@@ -348,6 +352,8 @@ def confirm_pickup(code: str):
             if rid in REPORTS:
                 REPORTS[rid].status = "returned"
                 db.save_report(REPORTS[rid])
+        if found:
+            notify.item_returned(found)
     return {"status": "returned", "item": public(found) if found else None}
 
 
