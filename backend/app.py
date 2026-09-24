@@ -155,9 +155,9 @@ def alert_owners(found: Report) -> int:
             where = found.kept_at or "Security desk"
             place = ("the finder still has it" if where == "With the finder"
                      else f"it's at the {where.lower()}")
-            item = found.category.replace("_", " ")
+            item = notify.a_item(found)
             db.add_notification(m.report.id, found.id, m.confidence,
-                                f"A {item} that may be yours was handed in, and {place}.")
+                                f"{item[0].upper()}{item[1:]} that may be yours was handed in, and {place}.")
             notify.match_found(m.report, found, m.confidence, place)
             alerted += 1
     return alerted

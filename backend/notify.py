@@ -36,10 +36,24 @@ def enabled() -> bool:
     return bool(SMTP_USER and SMTP_PASSWORD)
 
 
+NOUNS = {"id_card": "ID card", "other": "item", "clothing": "clothing item",
+         "earphones": "pair of earphones", "glasses": "pair of glasses", "keys": "set of keys"}
+
+
 def _item(r: Report) -> str:
+    """'pink Nike clothing item', 'pair of black Bose earphones', 'ID card'."""
     colors = "" if r.category == "id_card" else " and ".join(r.colors)
-    name = {"id_card": "ID card", "other": "item"}.get(r.category, r.category.replace("_", " "))
-    return " ".join(x for x in (colors, r.brand, name) if x)
+    brand = r.brand[0].upper() + r.brand[1:] if r.brand and r.brand.islower() else r.brand
+    noun = NOUNS.get(r.category, r.category.replace("_", " "))
+    counter, _, noun = noun.rpartition(" of ")          # "pair of earphones" -> "pair", "earphones"
+    words = " ".join(x for x in (colors, brand, noun) if x)
+    return f"{counter} of {words}" if counter else words
+
+
+def a_item(r: Report) -> str:
+    """With the right article: 'an orange bottle', 'a pink Nike clothing item'."""
+    name = _item(r)
+    return ("an " if name[0].lower() in "aeiou" else "a ") + name
 
 
 def _link(path: str) -> str:
@@ -72,8 +86,9 @@ def send(report: Report | None, subject: str, body: str) -> None:
 
 # ============================================================================= the four emails
 def match_found(lost: Report, found: Report, confidence: float, place: str) -> None:
-    send(lost, f"A {_item(found)} that may be yours was handed in",
-         f"Good news: someone handed in a {_item(found)} that matches your report "
+    item = a_item(found)
+    send(lost, f"{item[0].upper()}{item[1:]} that may be yours was handed in",
+         f"Good news: someone handed in {item} that matches your report "
          f"({round(confidence * 100)}% confidence), and {place}.\n\n"
          "To collect it, open your report, press \"This is mine\" and answer one question "
          "about it. The question checks you're the owner." + _link(f"/reports/{lost.id}"))
