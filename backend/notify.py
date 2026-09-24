@@ -95,8 +95,8 @@ def match_found(lost: Report, found: Report, confidence: float, place: str, like
              f"({round(confidence * 100)}% confidence), and {place}.\n\n" + claim)
     else:
         send(lost, f"{item[0].upper()}{item[1:]} similar to yours was handed in",
-             f"Someone handed in {item} that looks similar to the {_item(lost)} you reported "
-             f"({round(confidence * 100)}% match), and {place}. It may not be yours, "
+             f"Someone handed in {item} that looks similar to the {_item(lost)} you reported, "
+             f"and {place}. It may not be yours, "
              "but it's worth a quick look at the photo and details.\n\nIf it is yours: " + claim[0].lower() + claim[1:])
 
 
