@@ -15,7 +15,10 @@ RUN npm run build
 # ---- 2. Backend ------------------------------------------------------------
 FROM python:3.12-slim
 RUN useradd -m -u 1000 user
-ENV PYTHONUNBUFFERED=1 HF_HOME=/home/user/.cache/huggingface HF_HUB_DISABLE_SYMLINKS_WARNING=1
+# Report times are stored in the server's local time, so run in campus time
+# (override with a TZ variable on the host). Slim images may lack tzdata.
+RUN apt-get update && apt-get install -y --no-install-recommends tzdata && rm -rf /var/lib/apt/lists/*
+ENV PYTHONUNBUFFERED=1 HF_HOME=/home/user/.cache/huggingface HF_HUB_DISABLE_SYMLINKS_WARNING=1 TZ=Asia/Kolkata
 WORKDIR /app
 
 # CPU-only torch: the default wheel bundles CUDA and is several GB larger.
