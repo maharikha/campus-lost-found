@@ -1,0 +1,33 @@
+item_id,role,description,category,colors,brand,location,hours,photo,text_on_item
+bottle1,lost,"Navy blue Milton steel bottle with a mountain sticker, last had it in the library",bottle,navy,Milton,library,0,,
+bottle1,found,"Blue metal bottle with a sticker on a reading table",bottle,blue,,library,1,,
+bottle2,lost,"Black plastic sipper bottle with a red cap, left it at the canteen",bottle,black;red,,canteen,0,,
+bottle2,found,"Black bottle with red lid near the canteen counter",bottle,black;red,,canteen,2,,
+charger1,lost,"Black phone charger with a long cable, my name Arjun is on the plug",charger,black,,canteen,0,,Arjun
+charger1,found,"Black charger on a canteen table",charger,black,,canteen,2,,ARJUN
+charger2,lost,"White Samsung fast charger, the cable is frayed near the plug",charger,white,Samsung,main_block,0,,
+charger2,found,"White charger with a damaged cable in classroom 204",charger,white,Samsung,main_block,1,,
+idcard1,lost,"Lost my ID card, Priya Sharma, 21CS045",id_card,,,parking,0,,
+idcard1,found,"Student ID card near the bike stand",id_card,,,parking,1,,Priya Sharma 21CS045
+hoodie1,lost,"Grey hoodie with a college fest logo, left in the auditorium after the event",clothing,gray,,auditorium,0,,
+hoodie1,found,"Grey sweatshirt on a seat in the auditorium",clothing,gray,,auditorium,3,,
+earbuds1,lost,"White earbuds case, boAt, one bud is missing",earphones,white,boAt,library,0,,
+earbuds1,found,"White wireless earbuds case found in the library",earphones,white,,library,4,,
+umbrella1,lost,"Black folding umbrella with a wooden handle",umbrella,black,,main_block,0,,
+umbrella1,found,"Black umbrella, wooden handle, left at the main block entrance",umbrella,black,,main_block,5,,
+keys1,lost,"Two keys on a red Manchester United keyring, lost near the sports complex",keys,red,,sports_complex,0,,
+keys1,found,"Keys with a red football club keyring on the track",keys,red,,sports_complex,2,,
+wallet1,lost,"Brown leather wallet with my bus pass inside, lost in the canteen",wallet,brown,,canteen,0,,
+wallet1,found,"Brown wallet left on a canteen bench",wallet,brown,,canteen,1,,
+d1,found,"Blue water bottle, plastic, near the sports complex",bottle,blue,,sports_complex,3,,
+d2,found,"Black charger plugged in at the library",charger,black,,library,2,,CSE LAB 3
+d3,found,"Black Dell laptop charger",charger,black,Dell,main_block,1,,
+d4,found,"Red umbrella found at the hostel gate",umbrella,red,,hostel,2,,
+d5,found,"Grey hoodie in the sports complex changing room",clothing,gray,,sports_complex,4,,
+d6,found,"Black earbuds case near the canteen",earphones,black,,canteen,2,,
+d7,found,"Staff ID card near the parking",id_card,,,parking,1,,Rahul Verma EMP2231
+d8,found,"Steel bottle, silver, in the auditorium",bottle,gray,,auditorium,3,,
+d9,found,"Black umbrella with a plastic handle, library entrance",umbrella,black,,library,2,,
+d10,found,"White charger near the canteen",charger,white,,canteen,1,,
+d11,found,"Black leather wallet in the library",wallet,black,,library,2,,
+d12,found,"Bunch of keys with a blue keyring outside the hostel",keys,blue,,hostel,3,,

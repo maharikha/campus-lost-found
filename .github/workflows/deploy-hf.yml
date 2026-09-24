@@ -1,0 +1,23 @@
+# Every push to main redeploys the app to the Hugging Face Space, which then
+# rebuilds the Docker image. Needs, in the GitHub repo settings:
+#   Secrets   -> HF_TOKEN  (Hugging Face token with the Write role)
+#   Variables -> HF_SPACE  (e.g. your-hf-username/campus-lost-found)
+name: Deploy to Hugging Face
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to the Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: git push --force "https://${HF_SPACE%%/*}:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" HEAD:main

@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+.venv/
+backend/lostfound.db
+backend/uploads/
+backend/calibrator.pkl
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+.DS_Store
