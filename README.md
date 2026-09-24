@@ -2,6 +2,8 @@
 
 **Report a lost or found item in a few seconds. The app matches descriptions and photos, explains each match, asks the one question that settles look-alikes, and checks ownership before anyone collects an item.**
 
+🌐 **Live demo: [campus-lost-found-production-4962.up.railway.app](https://campus-lost-found-production-4962.up.railway.app/)**
+
 📄 **[Detailed approach and design decisions →](docs/APPROACH.md)**
 
 ![Home page: report a lost or found item, with items handed in and items reported lost](docs/screenshots/home.png)
