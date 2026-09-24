@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api.js";
 import TagCard from "../components/TagCard.jsx";
-import { itemName } from "../lib/format.js";
+import { itemTitle } from "../lib/format.js";
 import { myReports } from "../lib/store.js";
 
 function statusText(report, alerts) {
@@ -34,21 +34,40 @@ export default function Home() {
       {mine.length > 0 && (
         <section className="mine-wrap" aria-labelledby="mine-title">
           <h2 id="mine-title">Your reports</h2>
-          <ul className="mine">
-            {mine.map(({ report, alerts }) => (
-              <li key={report.id}>
-                <Link to={`/reports/${report.id}`} className="mine__row">
-                  <span className={`side-dot side-dot--${report.kind}`} aria-hidden="true" />
-                  <span>
-                    {report.kind === "lost" ? `Your lost ${itemName(report)}` : `The ${itemName(report)} you found`}
-                  </span>
-                  <span className={`mine__status${alerts.length && report.status === "open" ? " mine__status--alert" : ""}`}>
-                    {statusText(report, alerts)}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="mine-cols">
+            {["lost", "found"].map((kind) => {
+              const rows = mine.filter(({ report }) => report.kind === kind);
+              return (
+                <div key={kind}>
+                  <h3 className="mine__head">
+                    <span className={`side-dot side-dot--${kind}`} aria-hidden="true" />
+                    {kind === "lost" ? "Things you lost" : "Things you found"}
+                  </h3>
+                  {rows.length === 0 ? (
+                    <p className="hint">
+                      Nothing yet. <Link to={`/${kind}`}>Report {kind === "lost" ? "a lost" : "a found"} item</Link>
+                    </p>
+                  ) : (
+                    <ul className="mine">
+                      {rows.map(({ report, alerts }) => (
+                        <li key={report.id}>
+                          <Link to={`/reports/${report.id}`} className="mine__row">
+                            <span className={`side-dot side-dot--${report.kind}`} aria-hidden="true" />
+                            <span>{itemTitle(report)}</span>
+                            <span
+                              className={`mine__status${alerts.length && report.status === "open" ? " mine__status--alert" : ""}`}
+                            >
+                              {statusText(report, alerts)}
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </section>
       )}
 

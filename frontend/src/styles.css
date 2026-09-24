@@ -110,7 +110,9 @@ p { margin: 0 0 12px; }
 .empty { padding: 22px; border: 2px dashed var(--line); border-radius: 16px; background: var(--paper); }
 
 .mine-wrap { margin-bottom: 36px; }
-.mine { display: grid; gap: 8px; max-width: 760px; margin: 0; padding: 0; list-style: none; }
+.mine-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 28px; align-items: start; }
+.mine__head { display: flex; align-items: center; gap: 10px; margin: 14px 0 10px; font-size: 1.05rem; }
+.mine { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .mine__row {
   display: grid; grid-template-columns: 12px 1fr auto; gap: 12px; align-items: center; padding: 14px 16px;
   border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); text-decoration: none;
@@ -313,6 +315,7 @@ tbody tr:last-child td { border-bottom: 0; }
   .nav-long { display: none; }
   .nav-short { display: inline; }
   .doors { grid-template-columns: 1fr; }
+  .mine-cols { grid-template-columns: 1fr; }
   .door { min-height: 0; }
   .row { grid-template-columns: 1fr; }
   .tag__shape {
