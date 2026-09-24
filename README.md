@@ -94,7 +94,7 @@ Emails are sent in the background, so the app never waits on the mail server, an
 | Backend | FastAPI, SQLite (vectors stored alongside reports) |
 | Matching | sentence-transformers: `all-MiniLM-L6-v2` for text, `clip-ViT-B-32` for photos and text-to-photo; rapidfuzz; scikit-learn for the optional learned calibrator |
 | Optional AI | Claude (Haiku) or any OpenAI-compatible model for extraction and claim judging |
-| Deployment | One Docker container serving the API, photos and frontend, deployed to Hugging Face Spaces |
+| Deployment | One Docker container serving the API, photos and frontend, deployed on Railway with a persistent volume |
 
 Matching runs in memory, so ranking an item against every open report takes milliseconds. The only slow step is the one-off photo embedding when a report is submitted.
 

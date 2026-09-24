@@ -5,6 +5,7 @@ restart doesn't re-run the models. Delete lostfound.db to start fresh.
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import threading
 from datetime import datetime
@@ -14,7 +15,10 @@ import numpy as np
 
 from matcher import Report
 
-DB_PATH = Path(__file__).parent / "lostfound.db"
+# DATA_DIR: where the database and photos live, e.g. a persistent volume when hosted.
+DATA_DIR = Path(os.getenv("DATA_DIR") or Path(__file__).parent)
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+DB_PATH = DATA_DIR / "lostfound.db"
 _lock = threading.Lock()
 _conn: sqlite3.Connection | None = None
 

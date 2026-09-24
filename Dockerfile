@@ -1,5 +1,5 @@
 # One container for the whole app: FastAPI serves the API, the photos and the
-# built React frontend. Works on Hugging Face Spaces (Docker) and any Docker host.
+# built React frontend. Works on Railway, Hugging Face Spaces (Docker) and any Docker host.
 #
 #   docker build -t lostfound .
 #   docker run -p 7860:7860 lostfound        -> http://localhost:7860
@@ -30,6 +30,9 @@ USER user
 
 # Download both models at build time, so the app starts in seconds.
 RUN python -c "from sentence_transformers import SentenceTransformer as S; S('all-MiniLM-L6-v2'); S('clip-ViT-B-32')"
+
+# Hosts mount persistent volumes as root (Railway: set DATA_DIR to the mount path).
+USER root
 
 WORKDIR /app/backend
 EXPOSE 7860

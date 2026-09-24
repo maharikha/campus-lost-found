@@ -35,7 +35,7 @@ import verify
 from matcher import CAMPUS_ZONES, CATEGORY_GROUPS, Encoder, Match, Report, best_question, rank
 
 HERE = Path(__file__).parent
-UPLOADS = HERE / "uploads"
+UPLOADS = db.DATA_DIR / "uploads"
 UPLOADS.mkdir(exist_ok=True)
 
 NOTIFY_AT = 0.75            # alert an owner once a found item reaches this confidence
