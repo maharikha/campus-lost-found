@@ -20,6 +20,7 @@
 - [Setup and running the project](#setup-and-running-the-project)
 - [Tech stack and project structure](#tech-stack-and-project-structure)
 - [Limitations and next steps](#limitations-and-next-steps)
+- [Team](#team)
 
 ---
 
@@ -254,3 +255,11 @@ Dockerfile, railway.json
 - **Privacy:** blur ID cards and faces in photos before listing.
 
 **On novelty:** text embeddings, CLIP, weighted fusion and entropy-based question selection are well-established techniques. Our contribution is combining them for lost and found: **match a finder's photo with an owner's words, stay honest when items look alike, ask the one question that settles it, and never hand over an item on a match alone.**
+
+## Team
+
+| Name | GitHub |
+|---|---|
+| Maharikha S | [@maharikha](https://github.com/maharikha) |
+| Sree Nithi Girisan | [@sreenithigirisan](https://github.com/sreenithigirisan) |
+| Pranav D | [@pranavdhanabalan](https://github.com/pranavdhanabalan) |
