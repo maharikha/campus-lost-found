@@ -69,7 +69,7 @@ function LostMatches({ report, alerts, result, setResult }) {
           <p className="note" role="status">
             {alerts.length === 1
               ? alerts[0].message
-              : `${alerts.length} items that may be yours have been handed in. They're listed below.`}
+              : `${alerts.length} items like yours have been handed in. They're listed below, most likely first.`}
           </p>
         )}
       </header>

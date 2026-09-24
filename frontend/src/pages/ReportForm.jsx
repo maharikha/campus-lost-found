@@ -40,7 +40,7 @@ const COPY = {
     secretHint: "A detail that isn't visible in your photo: a mark, what's inside, the lock screen. It's never shown; the owner has to describe it to claim the item.",
     keptAt: "Where are you leaving it?",
     contact: "Your email or phone",
-    contactHint: "Optional. Add your email and we'll tell you when the owner collects it.",
+    contactHint: "Add your email and we'll tell you when the owner collects it.",
     submit: "Save and alert owners",
     busy: "Saving…",
   },
