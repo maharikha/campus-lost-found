@@ -260,6 +260,4 @@ Dockerfile, railway.json
 
 | Name | GitHub |
 |---|---|
-| Maharikha S | [@maharikha](https://github.com/maharikha) |
-| Sree Nithi Girisan | [@sreenithigirisan](https://github.com/sreenithigirisan) |
-| Pranav D | [@pranavdhanabalan](https://github.com/pranavdhanabalan) |
+| Maharikha S | [@maharikha](https://github.com/maharikha) 
