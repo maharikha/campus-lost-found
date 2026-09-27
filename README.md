@@ -72,7 +72,7 @@ On most campuses, lost and found means a WhatsApp group, a cardboard box at the 
 
 ![Desk dashboard](docs/screenshots/desk.png)
 
-## Our approach and why we chose it
+## My approach and why I chose it
 
 > This is a summary. **[docs/APPROACH.md](docs/APPROACH.md)** explains every stage in detail: the exact formulas, thresholds, worked examples, and the alternatives we rejected.
 
