@@ -20,7 +20,7 @@
 - [Setup and running the project](#setup-and-running-the-project)
 - [Tech stack and project structure](#tech-stack-and-project-structure)
 - [Limitations and next steps](#limitations-and-next-steps)
-- [Team](#team)
+
 
 ---
 
