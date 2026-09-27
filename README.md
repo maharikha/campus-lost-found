@@ -256,8 +256,4 @@ Dockerfile, railway.json
 
 **On novelty:** text embeddings, CLIP, weighted fusion and entropy-based question selection are well-established techniques. Our contribution is combining them for lost and found: **match a finder's photo with an owner's words, stay honest when items look alike, ask the one question that settles it, and never hand over an item on a match alone.**
 
-## Team
-
-| Name | GitHub |
-|---|---|
-| Maharikha S | [@maharikha](https://github.com/maharikha) 
+Maharikha S | [@maharikha](https://github.com/maharikha) 
